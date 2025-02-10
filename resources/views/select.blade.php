@@ -64,7 +64,7 @@
                         isHtmlAllowed: @js($isHtmlAllowed()),
                         getOptionLabelUsing: async () => {
                             const state = @js($getState());
-                            return await window.getVillageName(state);
+                            return await window.getRegionName(state, {{ $getLevel()->value }});
                         },
                         getOptionLabelsUsing: async () => {
                             return await $wire.getFormSelectOptionLabels(@js($statePath))
@@ -76,8 +76,7 @@
                             if (!search) {
                                 return [];
                             }
-
-                            return await window.searchVillage(search);
+                            return await window.searchRegion(search, {{ $getLevel()->value }});
                         },
                         isAutofocused: @js($isAutofocused()),
                         isMultiple: @js($isMultiple()),
