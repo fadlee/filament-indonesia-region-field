@@ -25,6 +25,18 @@ class FilamentIndonesiaRegionFieldServiceProvider extends PackageServiceProvider
 
     public function register(): void
     {
+        //
+    }
+
+    public function boot(): void
+    {
+        $this->loadViewsFrom(__DIR__ . '/../resources/views', 'indonesia-region-field');
+
+        FilamentView::registerRenderHook(
+            PanelsRenderHook::PAGE_END,
+            fn () => view('indonesia-region-field::loader')
+        );
+
         Route::get('/indonesia-region-field/data/{type}', function ($type) {
             // check if type is valid and get the region level
             $level = RegionLevel::fromDataType($type);
@@ -37,15 +49,5 @@ class FilamentIndonesiaRegionFieldServiceProvider extends PackageServiceProvider
                     'Content-Type' => 'text/plain'
                 ]);
         })->name('indonesia-region-field.data');
-    }
-
-    public function boot(): void
-    {
-        $this->loadViewsFrom(__DIR__ . '/../resources/views', 'indonesia-region-field');
-
-        FilamentView::registerRenderHook(
-            PanelsRenderHook::PAGE_END,
-            fn () => view('indonesia-region-field::loader')
-        );
     }
 }
