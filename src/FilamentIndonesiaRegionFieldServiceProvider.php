@@ -25,8 +25,6 @@ class FilamentIndonesiaRegionFieldServiceProvider extends PackageServiceProvider
 
     public function register(): void
     {
-        $currentPackageVersion = $this->getPackageVersion();
-
         Route::get('/indonesia-region-field/data/{type}', function ($type) {
             // check if type is valid and get the region level
             $level = RegionLevel::fromDataType($type);
@@ -45,23 +43,9 @@ class FilamentIndonesiaRegionFieldServiceProvider extends PackageServiceProvider
     {
         $this->loadViewsFrom(__DIR__ . '/../resources/views', 'indonesia-region-field');
 
-        FilamentAsset::register([
-            Js::make('indonesia-region-field', __DIR__ . '/../resources/js/indonesia-region-field.js'),
-        ], 'indonesia-region-field');
-
-        // Inject QR code scanner modal into the end of page
         FilamentView::registerRenderHook(
-            PanelsRenderHook::PAGE_START,
+            PanelsRenderHook::PAGE_END,
             fn () => view('indonesia-region-field::loader')
         );
-    }
-
-    protected function getPackageVersion(): string
-    {
-        try {
-            return InstalledVersions::getPrettyVersion('fadlee/filament-indonesia-region-field') ?? '1.0.0';
-        } catch (\Exception $e) {
-            return '1.0.0';
-        }
     }
 }
